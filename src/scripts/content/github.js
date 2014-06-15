@@ -2,11 +2,11 @@
 /*global $: false, document: false, togglbutton: false*/
 'use strict';
 
-togglbutton.render('#issue-header', {}, function (elem) {
+togglbutton.render('#js-discussion-header', {}, function (elem) {
   var link, description,
-    numElem = $('.issue-id'),
-    titleElem = $('#issue-title'),
-    projectElem = $('.repo-link');
+    numElem = $('.gh-header-number', elem),
+    titleElem = $('.js-issue-title', elem),
+    projectElem = $('.js-current-repository');
 
   description = titleElem.innerText;
   if (numElem !== null) {
@@ -14,10 +14,10 @@ togglbutton.render('#issue-header', {}, function (elem) {
   }
 
   link = togglbutton.createTimerLink({
-    className: 'bitbucket',
+    className: 'github',
     description: description,
     projectName: projectElem && projectElem.textContent
   });
 
-  $('#issue-header').appendChild(link);
+  $('.flex-table-item-primary').appendChild(link);
 });

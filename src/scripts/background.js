@@ -1,25 +1,34 @@
-/*jslint indent: 2 */
+/*jslint indent: 2, unparam: true*/
 /*global window: false, XMLHttpRequest: false, chrome: false, btoa: false */
 "use strict";
 var TogglButton = {
   $user: null,
+  $curEntryId: null,
   $apiUrl: "https://www.toggl.com/api/v7",
   $newApiUrl: "https://new.toggl.com/api/v8",
-  $sites: new RegExp([
-    'asana\\.com',
-    'podio\\.com',
-    'trello\\.com',
-    'github\\.com',
-    'bitbucket\\.org',
-    'gitlab\\.com',
-    'redbooth\\.com',
-    'teamweek\\.com',
-    'basecamp\\.com',
-    'unfuddle\\.com',
-    'worksection\\.com',
-    'pivotaltracker\\.com',
-    'producteev\\.com'].join('|')),
-  $curEntryId: null,
+  $sites: new RegExp(
+    [
+      'asana\\.com',
+      'podio\\.com',
+      'trello\\.com',
+      'github\\.com',
+      'bitbucket\\.org',
+      'gitlab\\.com',
+      'redbooth\\.com',
+      'teamweek\\.com',
+      'basecamp\\.com',
+      'unfuddle\\.com',
+      'worksection\\.com',
+      'pivotaltracker\\.com',
+      'producteev\\.com',
+      'sifterapp\\.com',
+      'docs\\.google\\.com',
+      'drive\\.google\\.com',
+      'redmine\\.org',
+      'myjetbrains\\.com',
+      'capsulecrm\\.com'
+    ].join('|')
+  ),
 
   checkUrl: function (tabId, changeInfo, tab) {
     if (changeInfo.status === 'complete') {

@@ -1,12 +1,12 @@
-/*jslint indent: 2 */
+/*jslint indent: 2, unparam: true*/
 /*global $: false, document: false, togglbutton: false*/
 'use strict';
 
-togglbutton.render('#js-discussion-header', {}, function (elem) {
+togglbutton.render('#issue-header', {}, function (elem) {
   var link, description,
-    numElem = $('.issue-number', elem),
-    titleElem = $('.js-issue-title', elem),
-    projectElem = $('.js-current-repository');
+    numElem = $('.issue-id'),
+    titleElem = $('#issue-title'),
+    projectElem = $('.repo-link');
 
   description = titleElem.innerText;
   if (numElem !== null) {
@@ -14,10 +14,10 @@ togglbutton.render('#js-discussion-header', {}, function (elem) {
   }
 
   link = togglbutton.createTimerLink({
-    className: 'github',
+    className: 'bitbucket',
     description: description,
     projectName: projectElem && projectElem.textContent
   });
 
-  $('.gh-header-meta').appendChild(link);
+  $('#issue-header').appendChild(link);
 });

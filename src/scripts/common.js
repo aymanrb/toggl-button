@@ -1,4 +1,4 @@
-/*jslint indent: 2 */
+/*jslint indent: 2, unparam: true*/
 /*global document: false, MutationObserver: false, chrome: false*/
 "use strict";
 
@@ -6,7 +6,6 @@ function $(s, elem) {
   elem = elem || document;
   return elem.querySelector(s);
 }
-
 
 function createTag(name, className, innerHTML) {
   var tag = document.createElement(name);
@@ -52,9 +51,8 @@ var togglbutton = {
             togglbutton.renderTo(selector, renderer);
           });
           observer.observe(document, {childList: true, subtree: true});
-        } else {
-          togglbutton.renderTo(selector, renderer);
         }
+        togglbutton.renderTo(selector, renderer);
       }
     });
   },
@@ -135,7 +133,7 @@ function createOption(id, cid, clientName, projectName) {
 }
 
 function createProjectSelect(userData, className) {
-  var clients, projectLabel, option, select = createTag('select', className);
+  var clients, projectLabel, select = createTag('select', className);
 
   //add an empty (default) option
   select.appendChild(createOption("default", null, "Select a toggl project"));

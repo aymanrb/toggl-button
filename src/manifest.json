@@ -1,6 +1,6 @@
 {
   "name": "Toggl Button",
-  "version": "0.2.13",
+  "version": "0.3.3",
   "manifest_version": 2,
   "description": "Add Official Toggl Online Timer to Popular Web Tools",
   "background": {
@@ -28,7 +28,13 @@
     "*://*.basecamp.com/*",
     "*://*.atlassian.net/*",
     "*://*.producteev.com/*",
-    "*://*.bitbucket.org/*"
+    "*://*.bitbucket.org/*",
+    "*://*.sifterapp.com/*",
+    "*://docs.google.com/*",
+    "*://*.redmine.org/*",
+    "*://*.myjetbrains.com/*",
+    "*://*.capsulecrm.com/*",
+    "*://go.xero.com/*"
   ],
   "icons": {
     "16": "images/icon-16.png",
@@ -51,7 +57,13 @@
         "*://*.worksection.com/*",
         "*://*.basecamp.com/*",
         "*://*.atlassian.net/*",
-        "*://*.producteev.com/*"
+        "*://*.producteev.com/*",
+        "*://*.sifterapp.com/*",
+        "*://docs.google.com/*",
+        "*://*.redmine.org/*",
+        "*://*.myjetbrains.com/*",
+        "*://*.capsulecrm.com/*",
+        "*://go.xero.com/*"
       ],
       "css": ["styles/style.css"],
       "js": ["scripts/common.js"]
@@ -115,6 +127,30 @@
     {
       "matches": ["*://*.atlassian.net/*"],
       "js": ["scripts/content/jira.js"]
+    },
+    {
+      "matches": ["*://*.sifterapp.com/*"],
+      "js": ["scripts/content/sifterapp.js"]
+    },
+    {
+      "matches": ["*://docs.google.com/*"],
+      "js": ["scripts/content/google-docs.js"]
+    },
+    {
+      "matches": ["*://*.redmine.org/*"],
+      "js": ["scripts/content/redmine.js"]
+    },
+    {
+      "matches": ["*://*.myjetbrains.com/*"],
+      "js": ["scripts/content/youtrack.js"]
+    },
+    {
+      "matches": ["*://*.capsulecrm.com/*"],
+      "js": ["scripts/content/capsule.js"]
+    },
+    {
+      "matches": ["https://go.xero.com/*"],
+      "js": ["scripts/content/xero.js"]
     }
   ]
 }
