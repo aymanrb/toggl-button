@@ -1,3 +1,19 @@
+[0.3.8]
+- Added support for Todoist
+- Fixed button in new Github issues page
+[0.3.7]
+- Added support for Any.Do
+- Added support for ZenDesk
+- Time entry is marked as billable if the project is billable
+[0.3.6]
+- API requests refactoring
+- Save logged in user to extension localStorage
+- Resolve the 999.00 hours problem with incorrect date and/or time
+[0.3.5]
+- Fix toggl.com regexp to support push state
+[0.3.4]
+- fetchUser API urls corrected
+- Podio content script refactoring
 [0.3.3]
 - Added support for CapsuleCRM
 - Added support for YouTrack InCloud

@@ -1,6 +1,6 @@
 {
   "name": "Toggl Button",
-  "version": "0.3.3",
+  "version": "0.3.8",
   "manifest_version": 2,
   "description": "Add Official Toggl Online Timer to Popular Web Tools",
   "background": {
@@ -34,7 +34,10 @@
     "*://*.redmine.org/*",
     "*://*.myjetbrains.com/*",
     "*://*.capsulecrm.com/*",
-    "*://go.xero.com/*"
+    "*://*.zendesk.com/*",
+    "*://go.xero.com/*",
+    "*://web.any.do/*",
+    "*://*.todoist.com/*"
   ],
   "icons": {
     "16": "images/icon-16.png",
@@ -63,7 +66,10 @@
         "*://*.redmine.org/*",
         "*://*.myjetbrains.com/*",
         "*://*.capsulecrm.com/*",
-        "*://go.xero.com/*"
+        "*://*.zendesk.com/*",
+        "*://go.xero.com/*",
+        "*://web.any.do/*",
+        "*://*.todoist.com/app*"
       ],
       "css": ["styles/style.css"],
       "js": ["scripts/common.js"]
@@ -149,8 +155,20 @@
       "js": ["scripts/content/capsule.js"]
     },
     {
+      "matches": ["*://*.zendesk.com/*"],
+      "js": ["scripts/content/zendesk.js"]
+    },
+    {
       "matches": ["https://go.xero.com/*"],
       "js": ["scripts/content/xero.js"]
+    },
+    {
+      "matches": ["https://web.any.do/*"],
+      "js": ["scripts/content/anydo.js"]
+    },
+    {
+      "matches": ["https://*.todoist.com/app*"],
+      "js": ["scripts/content/todoist.js"]
     }
   ]
 }

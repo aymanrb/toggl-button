@@ -1,11 +1,12 @@
 /*jslint indent: 2, unparam: true*/
-/*global window: false, XMLHttpRequest: false, chrome: false, btoa: false */
+/*global window: false, XMLHttpRequest: false, chrome: false, btoa: false, localStorage:false */
 "use strict";
+
 var TogglButton = {
   $user: null,
-  $curEntryId: null,
-  $apiUrl: "https://www.toggl.com/api/v7",
-  $newApiUrl: "https://new.toggl.com/api/v8",
+  $curEntry: null,
+  $apiUrl: "https://old.toggl.com/api/v7",
+  $newApiUrl: "https://www.toggl.com/api/v8",
   $sites: new RegExp(
     [
       'asana\\.com',
@@ -26,7 +27,10 @@ var TogglButton = {
       'drive\\.google\\.com',
       'redmine\\.org',
       'myjetbrains\\.com',
-      'capsulecrm\\.com'
+      'zendesk\\.com',
+      'capsulecrm\\.com',
+      'web\\.any\\.do',
+      'todoist\\.com'
     ].join('|')
   ),
 
@@ -36,36 +40,43 @@ var TogglButton = {
         TogglButton.setPageAction(tabId);
       } else if (/toggl\.com\/track/.test(tab.url)) {
         TogglButton.fetchUser(TogglButton.$apiUrl);
-      } else if (/toggl\.com\/app/.test(tab.url)) {
+      } else if (/toggl\.com\/app\/index/.test(tab.url)) {
         TogglButton.fetchUser(TogglButton.$newApiUrl);
       }
     }
   },
 
-  fetchUser: function (apiUrl) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", apiUrl + "/me?with_related_data=true", true);
-    xhr.onload = function () {
-      if (xhr.status === 200) {
-        var projectMap = {}, resp = JSON.parse(xhr.responseText);
-        if (resp.data.projects) {
-          resp.data.projects.forEach(function (project) {
-            projectMap[project.name] = project.id;
-          });
+  fetchUser: function (apiUrl, token) {
+    TogglButton.ajax('/me?with_related_data=true', {
+      token: token || ' ',
+      baseUrl: apiUrl,
+      onLoad: function (xhr) {
+        var resp, apiToken, projectMap = {};
+        if (xhr.status === 200) {
+          resp = JSON.parse(xhr.responseText);
+          if (resp.data.projects) {
+            resp.data.projects.forEach(function (project) {
+              projectMap[project.name] = project;
+            });
+          }
+          TogglButton.$user = resp.data;
+          TogglButton.$user.projectMap = projectMap;
+          localStorage.removeItem('userToken');
+          localStorage.setItem('userToken', resp.data.api_token);
+        } else if (apiUrl === TogglButton.$apiUrl) {
+          TogglButton.fetchUser(TogglButton.$newApiUrl);
+        } else if (apiUrl === TogglButton.$newApiUrl && !token) {
+          apiToken = localStorage.getItem('userToken');
+          if (apiToken) {
+            TogglButton.fetchUser(TogglButton.$newApiUrl, apiToken);
+          }
         }
-        TogglButton.$user = resp.data;
-        TogglButton.$user.projectMap = projectMap;
-      } else if (apiUrl === TogglButton.$apiUrl) {
-        TogglButton.fetchUser(TogglButton.$newApiUrl);
       }
-    };
-    xhr.send();
+    });
   },
 
   createTimeEntry: function (timeEntry) {
-
-    var start = new Date(),
-      xhr = new XMLHttpRequest(),
+    var project, start = new Date(),
       entry = {
         time_entry: {
           start: start.toISOString(),
@@ -78,76 +89,63 @@ var TogglButton = {
         }
       };
 
-    if(timeEntry.projectName !== undefined) {
-      entry.time_entry.pid = TogglButton.$user.projectMap[timeEntry.projectName];
+    if (timeEntry.projectName !== undefined) {
+      project = TogglButton.$user.projectMap[timeEntry.projectName];
+      entry.time_entry.pid = project && project.id;
+      entry.time_entry.billable = project && project.billable;
     }
-
+		
 		//Create a new Project incase the projects map array doesn't already contain the requested project
 		if(timeEntry.projectName !== undefined && timeEntry.projectName != "" && (entry.time_entry.pid == null || entry.time_entry.pid == undefined)) {
-			if(confirm('Toggl couldn\'t find a project called "' + timeEntry.projectName + '". Would you like to create one now ?')){
+			if(confirm('Ooops ! Toggl couldn\'t find a project called "' + timeEntry.projectName + '". Would you like to create one now ?')){
 				TogglButton.createNewProject(timeEntry.projectName,timeEntry);
 				return false; //stop here until the new project is created
 			}
 		}
 
-    xhr.open("POST", TogglButton.$newApiUrl + "/time_entries", true);
-    xhr.setRequestHeader('Authorization', 'Basic ' + btoa(TogglButton.$user.api_token + ':api_token'));
-    
-		// handle response
-    xhr.addEventListener('load', function (e) {
-      var responseData, entryId;
-      responseData = JSON.parse(xhr.responseText);
-      entryId = responseData && responseData.data && responseData.data.id;
-      TogglButton.$curEntryId = entryId;
+    TogglButton.ajax('/time_entries', {
+      method: 'POST',
+      payload: entry,
+      onLoad: function (xhr) {
+        var responseData;
+        responseData = JSON.parse(xhr.responseText);
+        entry = responseData && responseData.data;
+        TogglButton.$curEntry = entry;
+      }
     });
-    xhr.send(JSON.stringify(entry));
   },
 
-  stopTimeEntry: function (entryId) {
-    entryId = entryId || TogglButton.$curEntryId;
-    if (!entryId) {
-      return;
+  ajax: function (url, opts) {
+    var xhr = new XMLHttpRequest(),
+      method = opts.method || 'GET',
+      baseUrl = opts.baseUrl || TogglButton.$newApiUrl,
+      token = opts.token || (TogglButton.$user && TogglButton.$user.api_token);
+
+    xhr.open(method, baseUrl + url, true);
+    if (opts.onLoad) {
+      xhr.addEventListener('load', function () { opts.onLoad(xhr); });
     }
-    var xhr = new XMLHttpRequest();
-
-    // PUT https://www.toggl.com/api/v8/time_entries/{time_entry_id}/stop
-    xhr.open("PUT", TogglButton.$newApiUrl + "/time_entries/" + entryId + "/stop", true);
-    xhr.setRequestHeader('Authorization', 'Basic ' + btoa(TogglButton.$user.api_token + ':api_token'));
-    xhr.send();
+    if (token && token !== ' ') {
+      xhr.setRequestHeader('Authorization', 'Basic ' + btoa(token + ':api_token'));
+    }
+    xhr.send(JSON.stringify(opts.payload));
   },
-	
-	//Create a New Project
-	createNewProject: function (projectName,timeEntry) {
 
-  	var xhr = new XMLHttpRequest();
-		var project_data = {
-		      project: {
-		        name: projectName,
-		        wid: TogglButton.$user.default_wid
-		      }
-    };
+  stopTimeEntry: function () {
+    if (!TogglButton.$curEntry) { return; }
+    var stopTime = new Date(),
+      startTime = new Date(-TogglButton.$curEntry.duration * 1000);
 
-		//POST https://www.toggl.com/api/v8/projects
-    xhr.open("POST", TogglButton.$newApiUrl + "/projects", true);
-    xhr.setRequestHeader('Authorization', 'Basic ' + btoa(TogglButton.$user.api_token + ':api_token'));
-
-		// handle response
-    xhr.addEventListener('load', function (e) {
-      var responseData, projectId;
-      responseData = JSON.parse(xhr.responseText);
-      projectId = responseData && responseData.data && responseData.data.id;
-
-			if(projectId == null || projectId == undefined){
-				projectId = 0;
-			}
-
-			TogglButton.$user.projectMap[projectName] = projectId;
-
-			TogglButton.createTimeEntry(timeEntry);
-
+    TogglButton.ajax("/time_entries/" + TogglButton.$curEntry.id, {
+      method: 'PUT',
+      payload: {
+        time_entry: {
+          stop: stopTime.toISOString(),
+          duration: Math.floor(((stopTime - startTime) / 1000))
+        }
+      }
     });
-    xhr.send(JSON.stringify(project_data));
-	},
+  },
 
   setPageAction: function (tabId) {
     var imagePath = 'images/inactive-19.png';
@@ -160,6 +158,33 @@ var TogglButton = {
     });
     chrome.pageAction.show(tabId);
   },
+
+	//Create a New Project
+	createNewProject: function (projectName,timeEntry) {
+    var project_data = {
+        project: {
+          name: projectName,
+          wid: TogglButton.$user.default_wid
+        }
+    };
+    
+    //POST https://www.toggl.com/api/v8/projects
+    TogglButton.ajax('/projects', {
+      method: 'POST',
+      payload: project_data,
+      onLoad: function (xhr) {
+        var responseData;
+        responseData = JSON.parse(xhr.responseText);
+        projectId = responseData && responseData.data;
+        if(projectId == null || projectId == undefined){
+            projectId = 0;
+        }
+        
+        TogglButton.$user.projectMap[projectName] = projectId;
+        TogglButton.createTimeEntry(timeEntry);
+      }
+    });
+	},
 
   newMessage: function (request, sender, sendResponse) {
     if (request.type === 'activate') {
@@ -176,7 +201,7 @@ var TogglButton = {
 
 chrome.pageAction.onClicked.addListener(function (tab) {
   if (TogglButton.$user === null) {
-    chrome.tabs.create({url: 'https://new.toggl.com/#login'});
+    chrome.tabs.create({url: 'https://www.toggl.com/#login'});
   }
 });
 
