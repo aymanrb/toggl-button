@@ -26,6 +26,7 @@ var TogglButton = {
       'docs\\.google\\.com',
       'drive\\.google\\.com',
       'redmine\\.org',
+			'redmine\\.deemalab\\.com',
       'myjetbrains\\.com',
       'zendesk\\.com',
       'capsulecrm\\.com',
@@ -74,7 +75,7 @@ var TogglButton = {
       }
     });
   },
-
+	
   createTimeEntry: function (timeEntry) {
     var project, start = new Date(),
       entry = {
@@ -88,16 +89,15 @@ var TogglButton = {
           created_with: timeEntry.createdWith || 'TogglButton'
         }
       };
-
     if (timeEntry.projectName !== undefined) {
       project = TogglButton.$user.projectMap[timeEntry.projectName];
       entry.time_entry.pid = project && project.id;
       entry.time_entry.billable = project && project.billable;
     }
-		
+
 		//Create a new Project incase the projects map array doesn't already contain the requested project
 		if(timeEntry.projectName !== undefined && timeEntry.projectName != "" && (entry.time_entry.pid == null || entry.time_entry.pid == undefined)) {
-			if(confirm('Ooops ! Toggl couldn\'t find a project called "' + timeEntry.projectName + '". Would you like to create one now ?')){
+			if(confirm('Toggl couldn\'t find a project called "' + timeEntry.projectName + '". Would you like to create one now ?')){
 				TogglButton.createNewProject(timeEntry.projectName,timeEntry);
 				return false; //stop here until the new project is created
 			}
@@ -167,19 +167,20 @@ var TogglButton = {
           wid: TogglButton.$user.default_wid
         }
     };
-    
+
     //POST https://www.toggl.com/api/v8/projects
     TogglButton.ajax('/projects', {
       method: 'POST',
+			async: false,
       payload: project_data,
       onLoad: function (xhr) {
         var responseData;
         responseData = JSON.parse(xhr.responseText);
-        projectId = responseData && responseData.data;
+        var projectId = responseData && responseData.data && responseData.data.id;
         if(projectId == null || projectId == undefined){
             projectId = 0;
         }
-        
+
         TogglButton.$user.projectMap[projectName] = projectId;
         TogglButton.createTimeEntry(timeEntry);
       }
