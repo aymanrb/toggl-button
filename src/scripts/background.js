@@ -145,7 +145,7 @@ var TogglButton = {
         }
       }
     });
-  },
+	},
 
   setPageAction: function (tabId) {
     var imagePath = 'images/inactive-19.png';
@@ -161,7 +161,7 @@ var TogglButton = {
 
 	//Create a New Project
 	createNewProject: function (projectName,timeEntry) {
-    var project_data = {
+    var projectData = {
         project: {
           name: projectName,
           wid: TogglButton.$user.default_wid
@@ -171,17 +171,24 @@ var TogglButton = {
     //POST https://www.toggl.com/api/v8/projects
     TogglButton.ajax('/projects', {
       method: 'POST',
-			async: false,
-      payload: project_data,
+      payload: projectData,
       onLoad: function (xhr) {
         var responseData;
         responseData = JSON.parse(xhr.responseText);
+				
         var projectId = responseData && responseData.data && responseData.data.id;
         if(projectId == null || projectId == undefined){
             projectId = 0;
         }
+        var newProject = {
+            active: true,
+            auto_estimates: false,
+            billable: false,
+            id: projectId,
+            name: projectName
+        };
 
-        TogglButton.$user.projectMap[projectName] = projectId;
+        TogglButton.$user.projectMap[projectName] = newProject;
         TogglButton.createTimeEntry(timeEntry);
       }
     });
@@ -206,6 +213,6 @@ chrome.pageAction.onClicked.addListener(function (tab) {
   }
 });
 
-TogglButton.fetchUser(TogglButton.$apiUrl);
+TogglButton.fetchUser(TogglButton.$newApiUrl);
 chrome.tabs.onUpdated.addListener(TogglButton.checkUrl);
 chrome.extension.onMessage.addListener(TogglButton.newMessage);
