@@ -26,7 +26,7 @@ var TogglButton = {
       'docs\\.google\\.com',
       'drive\\.google\\.com',
       'redmine\\.org',
-			'redmine\\.deemalab\\.com',
+      'redmine\\.deemalab\\.com',
       'myjetbrains\\.com',
       'zendesk\\.com',
       'capsulecrm\\.com',
@@ -75,7 +75,7 @@ var TogglButton = {
       }
     });
   },
-	
+
   createTimeEntry: function (timeEntry) {
     var project, start = new Date(),
       entry = {
@@ -95,13 +95,13 @@ var TogglButton = {
       entry.time_entry.billable = project && project.billable;
     }
 
-		//Create a new Project incase the projects map array doesn't already contain the requested project
-		if(timeEntry.projectName !== undefined && timeEntry.projectName != "" && (entry.time_entry.pid == null || entry.time_entry.pid == undefined)) {
-			if(confirm('Toggl couldn\'t find a project called "' + timeEntry.projectName + '". Would you like to create one now ?')){
-				TogglButton.createNewProject(timeEntry.projectName,timeEntry);
-				return false; //stop here until the new project is created
-			}
-		}
+	//Create a new Project incase the projects map array doesn't already contain the requested project
+	if(timeEntry.projectName !== undefined && timeEntry.projectName != "" && (entry.time_entry.pid == null || entry.time_entry.pid == undefined)) {
+        if(confirm('Toggl couldn\'t find a project called "' + timeEntry.projectName + '". Would you like to create one now ?')){
+            TogglButton.createNewProject(timeEntry.projectName,timeEntry);
+            return false; //stop here until the new project is created
+        }
+	}
 
     TogglButton.ajax('/time_entries', {
       method: 'POST',
@@ -175,7 +175,7 @@ var TogglButton = {
       onLoad: function (xhr) {
         var responseData;
         responseData = JSON.parse(xhr.responseText);
-				
+
         var projectId = responseData && responseData.data && responseData.data.id;
         if(projectId == null || projectId == undefined){
             projectId = 0;
