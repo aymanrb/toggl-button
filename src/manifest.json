@@ -1,6 +1,6 @@
 {
   "name": "Toggl Button",
-  "version": "0.3.8",
+  "version": "0.3.9",
   "manifest_version": 2,
   "description": "Add Official Toggl Online Timer to Popular Web Tools",
   "background": {
@@ -75,6 +75,10 @@
       ],
       "css": ["styles/style.css"],
       "js": ["scripts/common.js"]
+    },
+    {
+      "matches": ["*://www.toggl.com/app/timer", "*://www.toggl.com/"],
+      "js": ["scripts/content/toggl.js"]
     },
     {
       "matches": ["*://*.teamweek.com/*"],
