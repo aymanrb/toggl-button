@@ -1,11 +1,14 @@
 default: lint
 
-lint:
-	@node_modules/.bin/jslint src/scripts/*.js src/scripts/content/*.js
+lint: node_modules/.bin/jslint
+	@$< src/scripts/*.js src/scripts/content/*.js
+
+node_modules/.bin/jslint:
+	npm install
 
 dist: clean
 	@if [ ! -d "out" ]; then mkdir -p out; fi
-	@cp -R src/manifest.json src/images src/scripts src/styles out/
+	@cp -R src/manifest.json src/images src/scripts src/styles src/html out/
 	@zip -q -r toggl-button out && rm -rf out
 
 clean:

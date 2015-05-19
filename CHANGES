@@ -1,3 +1,119 @@
+[0.6.6]
+- Added sorting for tags
+- Added hover titles to project, tag and task selections
+[0.6.5]
+- Added support for TestRail
+- Projects grouped by Workspaces and Clients
+- Added "Start timer" link to Extension icon menu
+- Added running timer to Extension icon menu
+- Added user email to Extension icon menu
+- Wunderlist UI improvements
+- Teamweek domain name fix
+[0.6.4]
+- Fixed edit popup position in Basecamp Next
+[0.6.3]
+- Fixed setting entry billable if project is billable
+[0.6.2]
+- Added support for Flow
+- Added support for Google Calendar
+- Added support for Sprint.ly
+- Added support for Basecamp Classis (basecamphq.com)
+- Improvements for Taiga.io implementation
+- Improvements for Axosoft implementation
+- Don't display reminders when user is not logged in
+- Improved edit popup position calculations
+- Other smaller improvements and fixes
+[0.6.1]
+- Fixed issues with non-www toggl.com login
+- Added support for Help Scout
+[0.6.0]
+- Added support for Countersoft Gemini
+- Added support for esa.io
+- Added support for drupal.org
+- Fixed Todoist description parsing for links
+[0.5.11]
+- Added atlassian.com to support all JIRA versions
+[0.5.10]
+- Added support for Axosoft
+- Updated edit form hide button to use &times;
+- Fixed Todoist description parsing
+[0.5.9]
+- Added support for Taiga.io
+- Added support for HabitRPG
+- Fixes for GitLab
+- Todoist description parse fix
+[0.5.8]
+- Fixed updating Toggl Button link
+- Fixed Toggl Button in Zendesk
+- Fixed Asana new task description issue
+[0.5.7]
+- Added support for Google mail
+[0.5.6]
+- Fixed minimal mode Toggl Button link refreshing
+[0.5.5]
+- Fixed too bold permissions
+- Removed OTRS because of too strong permissions
+[0.5.4]
+- Grouping projects by workspaces
+- Show client names in project dropdown
+- Show only active projects in dropdown
+- Added tasks dropdown for Pro users
+- Added support for OTRS
+[0.5.3]
+- Fixed Todoist description parsing issue
+[0.5.2]
+- Removed references to deprecated api
+- Clear selected tags when reopening edit form
+- Update "Start timer" link when running entry has changed
+- Reworked user sync so that tabs permission can be removed
+[0.5.1]
+- Added support for Teamwork
+- Style fixes
+[0.5.0]
+- Updated Toggl button position in toodledo
+- Extension icon updating fix
+- UI fixes for different tools
+[0.4.9]
+- Fixed invisible project names in dropdown
+- Fixed some minor UI issues
+[0.4.8]
+- Fixed minor UI issues
+- Removed Font Awesome because issues with some tools
+[0.4.7]
+- Added Font Awesome icons
+[0.4.6]
+- New design for post start popup
+- Fixed Toggl Button in Any.do
+- Added Youtrack 6 support
+- Fixed settings save issue
+- Added duration mode support
+[0.4.5]
+- Added dayly automatic sync
+- Added sync menu item
+[0.4.4]
+- Added support for Toodledo
+- Fixed toggl-button's location for Teamweek's new design
+- Post start popup is always fully visible
+- Post start popup form style fixes
+[0.4.3]
+- Added "Remind me to track" setting
+- Added tags selection to post start popup
+[0.4.2]
+- Added support for Wunderlist
+- Added support for Trac
+- Added websocket support
+- Improved icons
+- Added Settings view
+- Position and z-index fix for post start popup
+[0.4.1]
+- Fixed packaging issue
+[0.4.0]
+- Convert from Page extension to Browser extension
+- Added post Start popup
+- Added Browser extension popup
+- Added Login and logout functionality
+- Added high resolution icons
+- Added offline/online and running/not running indicators to extension icon
 [0.3.9]
 - Github - fix content script for new issues layout
 - Todoist - add button after the notes and strip tags

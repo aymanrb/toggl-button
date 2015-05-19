@@ -1,6 +1,7 @@
 {
   "name": "Toggl Button",
-  "version": "0.3.9",
+  "short_name": "Toggl Button",
+  "version": "0.6.6",
   "manifest_version": 2,
   "description": "Add Official Toggl Online Timer to Popular Web Tools",
   "background": {
@@ -8,17 +9,25 @@
       "scripts/background.js"
     ]
   },
-  "page_action": {
-    "default_icon": "images/inactive-19.png",
+  "browser_action": {
+    "default_icon": {
+      "19": "images/inactive-19.png",
+      "38": "images/inactive-38.png"
+    },
+    "default_popup": "html/popup.html",
     "default_title": "Toggl Time Tracker"
   },
   "permissions": [
-    "tabs",
+    "notifications",
+    "idle",
     "*://*.toggl.com/*",
+    "*://toggl.com/*",
     "*://*.teamweek.com/*",
     "*://*.pivotaltracker.com/*",
     "*://*.github.com/*",
     "*://*.gitlab.com/*",
+    "*://*.testrail.com/*",
+    "*://*.testrail.net/*",
     "*://app.asana.com/*",
     "*://*.unfuddle.com/*",
     "*://*.podio.com/*",
@@ -26,7 +35,9 @@
     "*://*.trello.com/*",
     "*://*.worksection.com/*",
     "*://*.basecamp.com/*",
+    "*://*.basecamphq.com/*",
     "*://*.atlassian.net/*",
+    "*://*.jira.com/*",
     "*://*.producteev.com/*",
     "*://*.bitbucket.org/*",
     "*://*.sifterapp.com/*",
@@ -38,7 +49,24 @@
     "*://*.zendesk.com/*",
     "*://go.xero.com/*",
     "*://web.any.do/*",
-    "*://*.todoist.com/*"
+    "*://*.todoist.com/*",
+    "*://trac.edgewall.org/*",
+    "*://trac-hacks.org/*",
+    "*://*.trac.wordpress.org/*",
+    "*://bugs.jquery.com/*",
+    "*://*.wunderlist.com/*",
+    "*://*.teamwork.com/*",
+    "*://*.teamworkpm.net/*",
+    "*://*.habitrpg.com/*",
+    "*://*.taiga.io/*",
+    "*://*.axosoft.com/*",
+    "*://*.ongemini.com/*",
+    "*://*.drupal.org/*",
+    "*://*.esa.io/*",
+    "*://secure.helpscout.net/*",
+    "*://*.getflow.com/*",
+    "*://sprint.ly/*",
+    "*://www.google.com/calendar/*"
   ],
   "icons": {
     "16": "images/icon-16.png",
@@ -52,6 +80,8 @@
         "*://*.pivotaltracker.com/*",
         "*://*.github.com/*",
         "*://*.gitlab.com/*",
+        "*://*.testrail.com/*",
+        "*://*.testrail.net/*",
         "*://*.bitbucket.org/*",
         "*://app.asana.com/*",
         "*://*.unfuddle.com/*",
@@ -60,7 +90,10 @@
         "*://*.trello.com/*",
         "*://*.worksection.com/*",
         "*://*.basecamp.com/*",
+        "*://*.basecamphq.com/*",
         "*://*.atlassian.net/*",
+        "*://*.atlassian.com/*",
+        "*://*.jira.com/*",
         "*://*.producteev.com/*",
         "*://*.sifterapp.com/*",
         "*://docs.google.com/*",
@@ -71,13 +104,37 @@
         "*://*.zendesk.com/*",
         "*://go.xero.com/*",
         "*://web.any.do/*",
-        "*://*.todoist.com/app*"
+        "*://*.todoist.com/app*",
+        "*://trac.edgewall.org/*",
+        "*://trac-hacks.org/*",
+        "*://*.trac.wordpress.org/*",
+        "*://bugs.jquery.com/*",
+        "*://*.wunderlist.com/*",
+        "*://*.toodledo.com/*",
+        "*://*.teamwork.com/*",
+        "*://*.teamworkpm.net/*",
+        "*://mail.google.com/*",
+        "*://*.habitrpg.com/*",
+        "*://*.taiga.io/*",
+        "*://*.axosoft.com/*",
+        "*://*.ongemini.com/*",
+        "*://*.drupal.org/*",
+        "*://*.esa.io/*",
+        "*://secure.helpscout.net/*",
+        "*://*.getflow.com/*",
+        "*://sprint.ly/*",
+        "*://www.google.com/calendar/*"
       ],
       "css": ["styles/style.css"],
       "js": ["scripts/common.js"]
     },
     {
-      "matches": ["*://www.toggl.com/app/timer", "*://www.toggl.com/"],
+      "matches": [
+        "*://www.toggl.com/app/timer",
+        "*://www.toggl.com/",
+        "*://toggl.com/app/timer",
+        "*://toggl.com/"
+      ],
       "js": ["scripts/content/toggl.js"]
     },
     {
@@ -85,7 +142,7 @@
       "js": ["scripts/content/teamweek.js"]
     },
     {
-      "matches": ["*://new.teamweek.com/*"],
+      "matches": ["*://app.teamweek.com/*"],
       "js": ["scripts/content/teamweek_new.js"]
     },
     {
@@ -100,13 +157,17 @@
       "matches": ["*://*.bitbucket.org/*"],
       "js": ["scripts/content/bitbucket.js"]
     },
-	  {
+    {
       "matches": ["*://*.github.com/*"],
       "js": ["scripts/content/github.js"]
     },
     {
       "matches": ["*://*.gitlab.com/*"],
       "js": ["scripts/content/gitlab.js"]
+    },
+    {
+      "matches": ["*://*.testrail.com/*", "*://*.testrail.net/*"],
+      "js": ["scripts/content/testrail.js"]
     },
     {
       "matches": ["*://app.asana.com/*"],
@@ -133,11 +194,15 @@
       "js": ["scripts/content/worksection.js"]
     },
     {
-      "matches": ["*://*.basecamp.com/*"],
+      "matches": ["*://*.basecamp.com/*", "*://*.basecamphq.com/*"],
       "js": ["scripts/content/basecamp.js"]
     },
     {
-      "matches": ["*://*.atlassian.net/*"],
+      "matches": [
+        "*://*.atlassian.net/*",
+        "*://*.atlassian.com/*",
+        "*://*.jira.com/*"
+      ],
       "js": ["scripts/content/jira.js"]
     },
     {
@@ -179,6 +244,74 @@
     {
       "matches": ["https://*.todoist.com/app*"],
       "js": ["scripts/content/todoist.js"]
+    },
+    {
+      "matches": [
+        "*://*.teamwork.com/*",
+        "*://*.teamworkpm.net/*"
+      ],
+      "js": ["scripts/content/teamworkpm.js"]
+    },
+    {
+      "matches": [
+        "*://trac.edgewall.org/*",
+        "*://trac-hacks.org/*",
+        "*://*.trac.wordpress.org/*",
+        "*://bugs.jquery.com/*"
+      ],
+      "js": ["scripts/content/trac.js"]
+    },
+    {
+      "matches": ["https://*.wunderlist.com/*"],
+      "js": ["scripts/content/wunderlist.js"]
+    },
+    {
+      "matches": ["*://*.toodledo.com/*"],
+      "js": ["scripts/content/toodledo.js"]
+    },
+    {
+      "matches": ["*://mail.google.com/*"],
+      "js": ["scripts/content/google-mail.js"]
+    },
+    {
+      "matches": ["*://*.habitrpg.com/*"],
+      "js": ["scripts/content/habitrpg.js"]
+    },
+    {
+      "matches": ["*://*.taiga.io/*"],
+      "js": ["scripts/content/taiga.js"]
+    },
+    {
+      "matches": ["*://*.axosoft.com/*"],
+      "js": ["scripts/content/axosoft.js"]
+    },
+    {
+      "matches": ["*://*.ongemini.com/*"],
+      "js": ["scripts/content/gemini.js"]
+    },
+    {
+      "matches": ["*://*.drupal.org/*"],
+      "js": ["scripts/content/drupalorg.js"]
+    },
+    {
+      "matches": ["*://*.esa.io/*"],
+      "js": ["scripts/content/esa.js"]
+    },
+    {
+      "matches": ["*://secure.helpscout.net/*"],
+      "js": ["scripts/content/helpscout.js"]
+    },
+    {
+  	  "matches": ["*://*.getflow.com/*"],
+  	  "js": ["scripts/content/getflow.js"]
+  	},
+    {
+      "matches": ["*://sprint.ly/*"],
+      "js": ["scripts/content/sprintly.js"]
+    },
+    {
+      "matches": ["*://www.google.com/calendar/*"],
+      "js": ["scripts/content/google-calendar.js"]
     }
   ]
 }
